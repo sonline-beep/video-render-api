@@ -1,4 +1,5 @@
 const express = require("express");
+const { exec } = require("child_process");
 
 const app = express();
 
@@ -7,21 +8,27 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({
     status: "ok",
-    message: "API funcionando!",
-    version: "2.0.0"
+    api: "Video Render API",
+    version: "2.0"
   });
 });
 
-app.post("/render", async (req, res) => {
-  res.json({
-    status: "ok",
-    message: "Rota /render criada com sucesso!",
-    recebido: req.body
+app.get("/ffmpeg", (req, res) => {
+  exec("ffmpeg -version", (err, stdout, stderr) => {
+
+    if (err) {
+      return res.status(500).json({
+        instalado: false,
+        erro: stderr
+      });
+    }
+
+    res.json({
+      instalado: true,
+      versao: stdout.split("\n")[0]
+    });
+
   });
 });
 
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
+app.listen(process.env.PORT || 8080);
