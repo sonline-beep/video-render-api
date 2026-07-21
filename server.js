@@ -79,3 +79,50 @@ app.get("/", (req, res) => {
     });
 
 });
+            await renderVideo({
+
+                audio,
+
+                music,
+
+                videos,
+
+                output: saida,
+
+                jobId
+
+            });
+
+            return res.download(saida);
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            return res.status(500).json({
+
+                status: "erro",
+
+                mensagem: erro.message
+
+            });
+
+        }
+
+    }
+
+);
+
+app.listen(PORT, () => {
+
+    console.log(`Servidor iniciado na porta ${PORT}`);
+
+});
+
+
+
+
+
+
+
+
